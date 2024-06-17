@@ -1,0 +1,38 @@
+@mixin StatusColors($status) {
+  @if ($status == "in-progress") {
+    background-color: #f5d565;
+    > p {
+      background-color: #e9a23b;
+    }
+  }
+  @if ($status == "completed") {
+    background-color: #a0ecb1;
+    > p {
+      background-color: #32d657;
+    }
+  }
+  @if ($status == "wont-do") {
+    background-color: #f7d4d3;
+    > p {
+      background-color: #dd524c;
+    }
+  }
+}
+
+@mixin StatusColorsSelect($status) {
+  @if ($status == "in-progress") {
+    > p {
+      background-color: #e9a23b;
+    }
+  }
+  @if ($status == "completed") {
+    > p {
+      background-color: #32d657;
+    }
+  }
+  @if ($status == "wont-do") {
+    > p {
+      background-color: #dd524c;
+    }
+  }
+}

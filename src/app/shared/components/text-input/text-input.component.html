@@ -1,0 +1,11 @@
+<div class="custom-input {{ className }}">
+  <input
+    (input)="onInputChange($event)"
+    (blur)="onBlur()"
+    [value]="innerValue"
+    name="input"
+    [type]="inpType"
+    class="input font-helvetica"
+    [placeholder]="placeholder"
+  />
+</div>

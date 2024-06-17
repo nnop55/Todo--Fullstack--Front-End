@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="form-container">
+    <div class="left-side">
+      <button
+        (click)="startAnimation()"
+        class="font-outfit-normal"
+        [ngClass]="{ hidden: animate }"
+      >
+        {{ mode === Sign.In ? "Switch to register" : "Switch to login" }}
+      </button>
+    </div>
+    <div class="right-side">
+      @if(mode === Sign.In){
+      <app-in></app-in>
+      }@else {
+      <app-up (switchToLogin)="startAnimation()"></app-up>
+      }
+    </div>
+    <div
+      class="bar"
+      [ngClass]="{ animate }"
+      (animationiteration)="onAnimationEnd($event)"
+    ></div>
+  </div>
+</div>

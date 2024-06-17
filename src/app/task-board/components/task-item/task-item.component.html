@@ -1,6 +1,14 @@
-<div class="item {{ task.statusClass }}">
-  <p class="">
-    <img [src]="task.iconUrl" alt="" />
-  </p>
-  {{ task.title }}
+<div
+  class="item-wrapper"
+  (click)="onItemClick()"
+  [ngClass]="{
+    active: id === task.id
+  }"
+>
+  <div class="item font-outfit-semibold {{ task.statusClass }}">
+    <p class="">
+      <img [src]="task.iconUrl" alt="" />
+    </p>
+    {{ task.title }}
+  </div>
 </div>

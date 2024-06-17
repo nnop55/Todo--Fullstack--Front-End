@@ -1,0 +1,28 @@
+.custom-input {
+  .input {
+    border-radius: 8px;
+    border: 2px solid #e7ebf1;
+    outline: none;
+    padding: 7px;
+    transition: 0.4s;
+    width: 100%;
+    font-size: 14px;
+
+    &:hover {
+      border-color: #a4bdf1;
+    }
+    &:focus {
+      border-color: #4e80ee;
+    }
+
+    &::placeholder {
+      color: #98a4b7;
+    }
+  }
+
+  &.error {
+    .input {
+      border-color: #fd6c6c;
+    }
+  }
+}

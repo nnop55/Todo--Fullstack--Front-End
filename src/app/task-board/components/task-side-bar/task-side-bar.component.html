@@ -1,0 +1,65 @@
+<div class="overlay">
+  <div class="container">
+    <div class="header">
+      <h2 class="font-outfit-normal">Task details</h2>
+      <button class="close-btn" (click)="close()">
+        <img src="../../../../assets/icons/close_ring_duotone-1.svg" alt="" />
+      </button>
+    </div>
+    <div class="body">
+      <form (ngSubmit)="onFormSubmit(form)" [formGroup]="form" class="form">
+        <div class="form-items-wrapper">
+          <div class="form-item">
+            <label class="font-helvetica">Task name</label>
+            <app-text-input
+              [placeholder]="'Title'"
+              formControlName="title"
+            ></app-text-input>
+          </div>
+          <div class="form-item">
+            <label class="font-helvetica">Description</label>
+            <textarea
+              class="font-helvetica"
+              placeholder="Enter a short description"
+              formControlName="description"
+            ></textarea>
+          </div>
+          <div class="form-item">
+            <label class="font-helvetica">Status</label>
+            <div class="statuses">
+              @for(item of statuses; track $index){
+              <div
+                class="status-item {{ item.className }} font-outfit-medium"
+                [ngClass]="{
+                'selected':item.selected,
+              }"
+                (click)="selectStatus(item)"
+              >
+                <p class="">
+                  <img [src]="item.iconUrl" alt="" />
+                </p>
+                {{ item.title }}
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="form-btn">
+          <div class="buttons">
+            <button
+              class="delete-btn font-helvetica"
+              type="button"
+              (click)="deleteTask()"
+            >
+              Delete <img src="../../../../assets/icons/Trash.svg" alt="" />
+            </button>
+            <button class="submit-btn font-helvetica" [disabled]="form.invalid">
+              Save
+              <img src="../../../../assets/icons/Done_round.svg" alt="" />
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

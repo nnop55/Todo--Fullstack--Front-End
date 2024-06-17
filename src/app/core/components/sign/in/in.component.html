@@ -1,0 +1,31 @@
+<div>
+  <form
+    class="form"
+    (ngSubmit)="onFormSubmit(form)"
+    [formGroup]="form"
+    *validate="{form}; let errors"
+  >
+    <div class="form-item">
+      <app-text-input
+        [placeholder]="'E-mail'"
+        formControlName="email"
+        [className]="errors?.['email'] && 'error'"
+      ></app-text-input>
+    </div>
+    <div class="form-item">
+      <app-text-input
+        [placeholder]="'Password'"
+        formControlName="password"
+        [inpType]="'password'"
+        [className]="errors?.['password'] && 'error'"
+      ></app-text-input>
+    </div>
+
+    <div class="form-btn font-outfit-normal">
+      <button>Login</button>
+    </div>
+  </form>
+  @if(errorTxt){
+  <div class="error-text font-outfit-normal">{{ errorTxt }}</div>
+  }
+</div>

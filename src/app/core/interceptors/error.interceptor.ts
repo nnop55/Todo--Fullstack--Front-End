@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -11,10 +12,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((err: HttpErrorResponse) => {
       if (err.status === 401) {
         authService.logout();
-        location.reload();
       }
-      const error = err.error.message || err.statusText;
-      return throwError(error);
+
+      return throwError(err);
     })
   )
 };

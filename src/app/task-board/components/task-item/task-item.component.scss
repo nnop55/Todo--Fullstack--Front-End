@@ -1,39 +1,48 @@
-.item {
-  background-color: #f5e8d5;
-  font-size: 16px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  border-radius: 15px;
-  gap: 15px;
+@import "../../../../assets/styles/mixins";
 
-  .title {
-    font-size: 20px;
+.item-wrapper {
+  &.active {
+    border: 2px solid #4e80ee;
+    border-radius: 15px;
+    padding: 3px;
   }
 
-  &.todo {
-    background-color: #e3e8ef;
-    > p {
-      background-color: #97a3b6;
+  .item {
+    background-color: #f5e8d5;
+    font-size: 16px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 12px;
+    gap: 15px;
+    cursor: pointer;
+    transition: 200ms;
+
+    &:hover {
+      opacity: 0.8;
     }
-  }
-  &.in-progress {
-    background-color: #f5d565;
-    > p {
-      background-color: #e9a23b;
+
+    .title {
+      font-size: 20px;
     }
-  }
-  &.completed {
-    background-color: #a0ecb1;
+
     > p {
-      background-color: #32d657;
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-content: center;
+      border-radius: 12px;
     }
-  }
-  &.canceled {
-    background-color: #f7d4d3;
-    > p {
-      background-color: #dd524c;
+
+    &.in-progress {
+      @include StatusColors("in-progress");
+    }
+    &.completed {
+      @include StatusColors("completed");
+    }
+    &.wont-do {
+      @include StatusColors("wont-do");
     }
   }
 }

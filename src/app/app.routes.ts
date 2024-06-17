@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { AuthComponent } from './core/components/auth/auth.component';
 import { authGuard } from './core/guards/auth.guard';
+import { SignComponent } from './core/components/sign/sign.component';
 
 export const routes: Routes = [
     {
@@ -10,6 +10,9 @@ export const routes: Routes = [
                 .then(m => m.taskRoutes),
         canActivate: [authGuard]
     },
-    { path: 'auth', component: AuthComponent },
+    {
+        path: 'sign',
+        component: SignComponent
+    },
     { path: '**', redirectTo: '' }
 ];

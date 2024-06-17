@@ -1,0 +1,48 @@
+<div>
+  <form
+    class="form"
+    (ngSubmit)="onFormSubmit(form)"
+    [formGroup]="form"
+    *validate="{form}; let errors"
+  >
+    <div class="form-item">
+      <app-text-input
+        [placeholder]="'E-mail'"
+        formControlName="email"
+        [className]="errors?.['email'] && 'error'"
+      ></app-text-input>
+    </div>
+    <div class="form-item">
+      <app-text-input
+        [placeholder]="'Nickname'"
+        formControlName="nickname"
+        [className]="errors?.['nickname'] && 'error'"
+      ></app-text-input>
+    </div>
+    <div class="form-item">
+      <app-text-input
+        [placeholder]="'Password'"
+        [inpType]="'password'"
+        formControlName="password"
+        [className]="errors?.['password'] && 'error'"
+      ></app-text-input>
+    </div>
+    <div class="form-item">
+      <app-text-input
+        [placeholder]="'Confirm Password'"
+        [inpType]="'password'"
+        formControlName="confirmPassword"
+        [className]="errors?.['confirmPassword'] && 'error'"
+      ></app-text-input>
+    </div>
+
+    <div class="form-btn font-outfit-normal">
+      <button>Register</button>
+    </div>
+  </form>
+  @if(form.errors?.['mismatch']){
+  <div class="error-text font-outfit-normal">Password doesn't match</div>
+  } @if(errorTxt){
+  <div class="error-text font-outfit-normal">{{ errorTxt }}</div>
+  }
+</div>

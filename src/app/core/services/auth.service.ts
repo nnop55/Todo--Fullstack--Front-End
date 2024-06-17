@@ -1,17 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { ResponseStatus } from '../../shared/utils/unions';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  static readonly tokenKey = 'CURRENT-USER-TOKEN'
+
   private baseUrl = 'http://localhost:3000';
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
 
-  constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser')!));
+  constructor(private http: HttpClient, private router: Router) {
+    this.currentUserSubject = new BehaviorSubject<any>(localStorage.getItem(AuthService.tokenKey));
     this.currentUser = this.currentUserSubject.asObservable();
   }
   public get currentUserValue(): any {
@@ -19,22 +23,26 @@ export class AuthService {
   }
 
   login(payload: any) {
-    return this.http.post<any>(`${this.baseUrl}/api/login`, payload)
-      .pipe(tap(user => {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
+    return this.http.post<any>(`${this.baseUrl}/api/auth/login`, payload)
+      .pipe(tap(response => {
+        if (response.code === ResponseStatus.Success) {
+          localStorage.setItem(AuthService.tokenKey, response.data.accessToken);
+          this.currentUserSubject.next(response.data)
+        }
       }));
   }
 
   register(payload: any) {
-    return this.http.post<any>(`${this.baseUrl}/api/register`, payload);
+    return this.http.post<any>(`${this.baseUrl}/api/auth/register`, payload);
   }
 
   logout() {
-    return this.http.post<any>(`${this.baseUrl}/api/logout`, {})
+    return this.http.post<any>(`${this.baseUrl}/api/auth/logout`, {})
       .pipe(tap(() => {
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem(AuthService.tokenKey);
         this.currentUserSubject.next(null);
+        this.router.navigate(['/']);
+        location.reload();
       }));
   }
 }

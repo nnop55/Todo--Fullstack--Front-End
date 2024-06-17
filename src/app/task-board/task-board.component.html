@@ -1,19 +1,26 @@
 <section class="container">
+  <div class="log-out">
+    <img (click)="logout()" src="../../assets/icons/log_out.svg" alt="" />
+  </div>
   <div class="header">
     <div class="left-side">
-      <img src="../../assets/Logo.svg" alt="" />
+      <img src="../../assets/icons/Logo.svg" alt="" />
     </div>
     <div class="right-side">
       <h1 class="font-outfit-normal title">
-        My Task Board <img src="../../assets/Edit_duotone.svg" alt="" />
+        My Task Board <img src="../../assets/icons/Edit_duotone.svg" alt="" />
       </h1>
       <h6 class="font-outfit-light description">Tasks to keep organised</h6>
     </div>
   </div>
   <div class="list">
-    <app-task-item></app-task-item>
-    <button class="font-outfit-semibold add-task">
-      <p><img src="../../assets/Add_round_duotone.svg" alt="" /></p>
+    @if(tasksData.length > 0){ @for(item of tasksData; track $index){
+    <app-task-item [task]="item"></app-task-item>
+    } }
+  </div>
+  <div class="add-btn-wrapper">
+    <button class="font-outfit-semibold add-task" (click)="openSideBar()">
+      <p><img src="../../assets/icons/Add_round_duotone.svg" alt="" /></p>
       Add new task
     </button>
   </div>
