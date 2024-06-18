@@ -27,7 +27,7 @@ export class AuthService {
       .pipe(tap(response => {
         if (response.code === ResponseStatus.Success) {
           localStorage.setItem(AuthService.tokenKey, response.data.accessToken);
-          this.currentUserSubject.next(response.data)
+          this.currentUserSubject.next(response.data.accessToken)
         }
       }));
   }
