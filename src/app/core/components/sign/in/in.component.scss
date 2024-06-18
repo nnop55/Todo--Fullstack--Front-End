@@ -1,20 +1,3 @@
-.form {
-  display: flex;
-  flex-direction: column;
+@import "../../../../../assets/styles/mixins";
 
-  .form-item {
-    margin: 5px 0;
-  }
-
-  .form-btn {
-    margin-top: 10px;
-    > button {
-      width: 100%;
-      border-radius: 7px;
-      border: none;
-      background: #e9a23b;
-      padding: 5px 10px;
-      color: #fff;
-    }
-  }
-}
+@include formWrapper();

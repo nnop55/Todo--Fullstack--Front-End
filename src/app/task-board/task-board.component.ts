@@ -1,41 +1,57 @@
-import { Component, ViewContainerRef, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TaskItemComponent } from './components/task-item/task-item.component';
-import { DyComponentsService } from '../shared/services/dy-components.service';
 import { AuthService } from '../core/services/auth.service';
 import { TaskBoardService } from './task-board.service';
 import { ResponseStatus } from '../shared/utils/unions';
+import { TaskSideBarComponent } from './components/task-side-bar/task-side-bar.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-task-board',
   standalone: true,
-  imports: [TaskItemComponent],
+  imports: [TaskItemComponent, TaskSideBarComponent],
   templateUrl: './task-board.component.html',
   styleUrl: './task-board.component.scss'
 })
 export class TaskBoardComponent {
 
-  private vcRef = inject(ViewContainerRef);
-  private dyService = inject(DyComponentsService);
   private authService = inject(AuthService);
   private taskService = inject(TaskBoardService);
+  private route = inject(ActivatedRoute)
 
+  sidebarOpened: boolean = false
   tasksData: any[] = []
+
+  refresh: boolean = false
 
   ngOnInit(): void {
     this.getAllTasks()
   }
 
+  get selectedId() {
+    return parseInt(this.route.snapshot.queryParams['id'])
+  }
+
   getAllTasks() {
+    this.refresh = true;
+
     this.taskService.getTasks()
       .subscribe(response => {
         if (response.code === ResponseStatus.Success) {
           this.tasksData = response.data
         }
+        this.refresh = false
       })
   }
 
   openSideBar() {
-    this.dyService.openSideBar(this.vcRef)
+    this.sidebarOpened = true
+  }
+
+  handleClose(ev: boolean) {
+    if (ev)
+      this.getAllTasks()
+    this.sidebarOpened = false
   }
 
   logout() {

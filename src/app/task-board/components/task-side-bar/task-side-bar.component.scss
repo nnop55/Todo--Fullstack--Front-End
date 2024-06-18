@@ -73,21 +73,17 @@
               }
 
               > p {
-                width: 50px;
-                height: 50px;
-                display: grid;
-                place-content: center;
-                border-radius: 12px;
+                @include iconWrapper();
               }
 
               &.in-progress {
-                @include StatusColorsSelect("in-progress");
+                @include statusColorsSelect("in-progress");
               }
               &.completed {
-                @include StatusColorsSelect("completed");
+                @include statusColorsSelect("completed");
               }
               &.wont-do {
-                @include StatusColorsSelect("wont-do");
+                @include statusColorsSelect("wont-do");
               }
             }
           }
@@ -99,23 +95,7 @@
           textarea {
             resize: none;
             height: 150px;
-            border-radius: 8px;
-            border: 2px solid #e7ebf1;
-            outline: none;
-            padding: 7px;
-            transition: 0.4s;
-            font-size: 14px;
-
-            &::placeholder {
-              color: #98a4b7;
-            }
-
-            &:hover {
-              border-color: #a4bdf1;
-            }
-            &:focus {
-              border-color: #4e80ee;
-            }
+            @include inputEl;
           }
         }
 

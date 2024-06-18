@@ -14,8 +14,12 @@
     </div>
   </div>
   <div class="list">
-    @if(tasksData.length > 0){ @for(item of tasksData; track $index){
-    <app-task-item [task]="item"></app-task-item>
+    @if(!refresh){ @for(item of tasksData; track $index){
+    <app-task-item
+      [task]="item"
+      [id]="selectedId"
+      (openSidebarEmmitter)="openSideBar()"
+    ></app-task-item>
     } }
   </div>
   <div class="add-btn-wrapper">
@@ -25,3 +29,10 @@
     </button>
   </div>
 </section>
+
+@if(sidebarOpened){
+<app-task-side-bar
+  [id]="selectedId"
+  (closeEmitter)="handleClose($event)"
+></app-task-side-bar>
+}

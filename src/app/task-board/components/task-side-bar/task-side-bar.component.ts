@@ -1,11 +1,10 @@
-import { Component, inject } from '@angular/core';
-import { DyComponentsService } from '../../../shared/services/dy-components.service';
+import { Component, Input, inject, output } from '@angular/core';
 import { TextInputComponent } from '../../../shared/components/text-input/text-input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ResponseStatus, TaskForm } from '../../../shared/utils/unions';
 import { NgClass } from '@angular/common';
 import { TaskBoardService } from '../../task-board.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-side-bar',
@@ -15,13 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './task-side-bar.component.scss'
 })
 export class TaskSideBarComponent {
-  private dyService = inject(DyComponentsService);
+  @Input() id!: number;
+
   private taskService = inject(TaskBoardService);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
 
-  id!: number;
-
+  closeEmitter = output<boolean>();
   form!: FormGroup;
 
   statuses = [
@@ -50,7 +48,6 @@ export class TaskSideBarComponent {
 
   ngOnInit(): void {
     this.initForm()
-    this.id = parseInt(this.route.snapshot.queryParams['id'])
     this.fillByTaskId()
   }
 
@@ -63,12 +60,7 @@ export class TaskSideBarComponent {
             this.f['title']?.setValue(task.title);
             this.f['description']?.setValue(task.description);
             this.f['status']?.setValue(task.status);
-
-            for (let item of this.statuses) {
-              if (item.value === task.status) {
-                item.selected = true
-              }
-            }
+            this.selectDefaultStatus(task)
           }
         })
     }
@@ -84,6 +76,14 @@ export class TaskSideBarComponent {
 
   get f() {
     return this.form.controls
+  }
+
+  selectDefaultStatus(task: any) {
+    for (let item of this.statuses) {
+      if (item.value === task.status) {
+        item.selected = true
+      }
+    }
   }
 
   selectStatus(item: any) {
@@ -103,40 +103,49 @@ export class TaskSideBarComponent {
       return
     }
     if (this.id) {
-      this.taskService.editTask(this.id, form.value)
-        .subscribe(response => {
-          if (response.code === ResponseStatus.Success) {
-            this.close()
-          }
-        })
+      this.editTask()
     } else {
-      this.taskService.addTask(form.value)
-        .subscribe(response => {
-          if (response.code === ResponseStatus.Success) {
-            this.close()
-          }
-        })
+      this.addTask()
     }
 
+  }
+
+  editTask() {
+    this.taskService.editTask(this.id, this.form.value)
+      .subscribe(response => {
+        if (response.code === ResponseStatus.Success) {
+          this.close(true)
+        }
+      })
+  }
+
+  addTask() {
+    this.taskService.addTask(this.form.value)
+      .subscribe(response => {
+        if (response.code === ResponseStatus.Success) {
+          this.close(true)
+        }
+      })
   }
 
   deleteTask() {
     this.taskService.deleteTask(this.id)
       .subscribe(response => {
         if (response.code === ResponseStatus.Success) {
-          this.close()
+          this.close(true)
         }
       })
   }
 
-  close() {
+  close(action: boolean = false) {
     if (this.id) {
       this.router.navigate(
         [`/tasks`],
         { queryParams: { id: null } }
       )
     }
-    this.dyService.closeSideBar()
+
+    this.closeEmitter.emit(action)
   }
 
 }

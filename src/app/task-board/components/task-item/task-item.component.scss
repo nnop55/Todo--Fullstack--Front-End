@@ -28,21 +28,17 @@
     }
 
     > p {
-      width: 50px;
-      height: 50px;
-      display: grid;
-      place-content: center;
-      border-radius: 12px;
+      @include iconWrapper();
     }
 
     &.in-progress {
-      @include StatusColors("in-progress");
+      @include statusColors("in-progress");
     }
     &.completed {
-      @include StatusColors("completed");
+      @include statusColors("completed");
     }
     &.wont-do {
-      @include StatusColors("wont-do");
+      @include statusColors("wont-do");
     }
   }
 }

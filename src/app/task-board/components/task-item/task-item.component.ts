@@ -1,8 +1,7 @@
-import { Component, Input, ViewContainerRef, inject } from '@angular/core';
+import { Component, Input, inject, output } from '@angular/core';
 import { Status } from '../../../shared/utils/unions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgClass } from '@angular/common';
-import { DyComponentsService } from '../../../shared/services/dy-components.service';
 
 @Component({
   selector: 'app-task-item',
@@ -13,12 +12,12 @@ import { DyComponentsService } from '../../../shared/services/dy-components.serv
 })
 export class TaskItemComponent {
   @Input() task: any;
-  @Input() id!: number;
+  @Input() id!: any;
+
+  openSidebarEmmitter = output<void>()
 
   private router = inject(Router)
-  private route = inject(ActivatedRoute)
-  private dyService = inject(DyComponentsService)
-  private vcRef = inject(ViewContainerRef)
+
 
   ngOnInit(): void {
     switch (this.task.status) {
@@ -35,10 +34,9 @@ export class TaskItemComponent {
         this.task.statusClass = 'wont-do'
         break;
     }
-    this.id = parseInt(this.route.snapshot.queryParams['id']);
 
     if (this.id) {
-      this.dyService.openSideBar(this.vcRef)
+      this.openSidebarEmmitter.emit()
     }
   }
 
@@ -48,7 +46,7 @@ export class TaskItemComponent {
       [`/tasks`],
       { queryParams: { id: this.task.id } }
     )
-    this.dyService.openSideBar(this.vcRef)
+    this.openSidebarEmmitter.emit()
   }
 
 }
