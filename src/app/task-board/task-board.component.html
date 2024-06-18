@@ -14,7 +14,7 @@
     </div>
   </div>
   <div class="list">
-    @if(!refresh){ @for(item of tasksData; track $index){
+    @if(tasks$ | async; as tasks){ @for(item of tasks; track $index){
     <app-task-item
       [task]="item"
       [id]="selectedId"

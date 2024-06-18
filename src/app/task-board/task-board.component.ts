@@ -5,11 +5,13 @@ import { TaskBoardService } from './task-board.service';
 import { ResponseStatus } from '../shared/utils/unions';
 import { TaskSideBarComponent } from './components/task-side-bar/task-side-bar.component';
 import { ActivatedRoute } from '@angular/router';
+import { Observable, filter, map } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-task-board',
   standalone: true,
-  imports: [TaskItemComponent, TaskSideBarComponent],
+  imports: [TaskItemComponent, TaskSideBarComponent, AsyncPipe],
   templateUrl: './task-board.component.html',
   styleUrl: './task-board.component.scss'
 })
@@ -20,12 +22,15 @@ export class TaskBoardComponent {
   private route = inject(ActivatedRoute)
 
   sidebarOpened: boolean = false
-  tasksData: any[] = []
+  tasks$!: Observable<any[]>;
 
-  refresh: boolean = false
 
   ngOnInit(): void {
     this.getAllTasks()
+
+    if (this.selectedId) {
+      this.openSideBar()
+    }
   }
 
   get selectedId() {
@@ -33,15 +38,10 @@ export class TaskBoardComponent {
   }
 
   getAllTasks() {
-    this.refresh = true;
-
-    this.taskService.getTasks()
-      .subscribe(response => {
-        if (response.code === ResponseStatus.Success) {
-          this.tasksData = response.data
-        }
-        this.refresh = false
-      })
+    this.tasks$ = this.taskService.getTasks().pipe(
+      filter(e => e.code === ResponseStatus.Success),
+      map(e => e.data)
+    );
   }
 
   openSideBar() {

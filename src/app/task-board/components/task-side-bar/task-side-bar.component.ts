@@ -54,14 +54,17 @@ export class TaskSideBarComponent {
   fillByTaskId() {
     if (this.id) {
       this.taskService.getTaskById(this.id)
-        .subscribe(response => {
-          if (response.code === ResponseStatus.Success) {
-            const task = response.data
-            this.f['title']?.setValue(task.title);
-            this.f['description']?.setValue(task.description);
-            this.f['status']?.setValue(task.status);
-            this.selectDefaultStatus(task)
-          }
+        .subscribe({
+          next: (response) => {
+            if (response.code === ResponseStatus.Success) {
+              const task = response.data
+              this.f['title']?.setValue(task.title);
+              this.f['description']?.setValue(task.description);
+              this.f['status']?.setValue(task.status);
+              this.selectDefaultStatus(task)
+            }
+          },
+          error: () => this.close()
         })
     }
   }

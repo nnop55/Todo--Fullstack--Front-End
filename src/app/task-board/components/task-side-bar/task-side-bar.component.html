@@ -49,6 +49,7 @@
             <button
               class="delete-btn font-helvetica"
               type="button"
+              [disabled]="!id"
               (click)="deleteTask()"
             >
               Delete <img src="../../../../assets/icons/Trash.svg" alt="" />

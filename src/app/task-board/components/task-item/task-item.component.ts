@@ -34,10 +34,6 @@ export class TaskItemComponent {
         this.task.statusClass = 'wont-do'
         break;
     }
-
-    if (this.id) {
-      this.openSidebarEmmitter.emit()
-    }
   }
 
   onItemClick() {
