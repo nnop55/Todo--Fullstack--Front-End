@@ -27,7 +27,7 @@
           <div class="form-item">
             <label class="font-helvetica">Status</label>
             <div class="statuses">
-              @for(item of statuses; track $index){
+              @for(item of statuses(); track $index){
               <div
                 class="status-item {{ item.className }} font-outfit-medium"
                 [ngClass]="{

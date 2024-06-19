@@ -1,4 +1,4 @@
-import { Component, Input, inject, output } from '@angular/core';
+import { Component, Input, computed, inject, output, signal } from '@angular/core';
 import { TextInputComponent } from '../../../shared/components/text-input/text-input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ResponseStatus, TaskForm } from '../../../shared/utils/unions';
@@ -22,29 +22,33 @@ export class TaskSideBarComponent {
   closeEmitter = output<boolean>();
   form!: FormGroup;
 
-  statuses = [
-    {
-      iconUrl: '../../../../assets/icons/Time_atack_duotone.svg',
-      title: 'In Progress',
-      className: 'in-progress',
-      selected: false,
-      value: 0
-    },
-    {
-      iconUrl: '../../../../assets/icons/Done_round_duotone.svg',
-      title: 'Completed',
-      className: 'completed',
-      selected: false,
-      value: 1
-    },
-    {
-      iconUrl: '../../../../assets/icons/close_ring_duotone-1.svg',
-      title: `Won't do`,
-      className: 'wont-do',
-      selected: false,
-      value: 2
-    }
-  ]
+  statusesSig = signal(
+    [
+      {
+        iconUrl: '../../../../assets/icons/Time_atack_duotone.svg',
+        title: 'In Progress',
+        className: 'in-progress',
+        selected: false,
+        value: 0
+      },
+      {
+        iconUrl: '../../../../assets/icons/Done_round_duotone.svg',
+        title: 'Completed',
+        className: 'completed',
+        selected: false,
+        value: 1
+      },
+      {
+        iconUrl: '../../../../assets/icons/close_ring_duotone-1.svg',
+        title: `Won't do`,
+        className: 'wont-do',
+        selected: false,
+        value: 2
+      }
+    ]
+  )
+
+  statuses = computed(this.statusesSig)
 
   ngOnInit(): void {
     this.initForm()
@@ -82,23 +86,31 @@ export class TaskSideBarComponent {
   }
 
   selectDefaultStatus(task: any) {
-    for (let item of this.statuses) {
-      if (item.value === task.status) {
-        item.selected = true
+    this.statusesSig.update(statuses => {
+      for (let each of
+        statuses) {
+        if (each.value === task.status) {
+          each.selected = true
+        }
       }
-    }
+      return statuses
+    })
   }
 
   selectStatus(item: any) {
     this.f['status']?.setValue(item.value)
     item.selected = true
-
-    for (let each of
-      this.statuses) {
-      if (each.value !== item.value) {
-        each.selected = false
+    this.statusesSig.update(statuses => {
+      for (let each of
+        statuses) {
+        if (each.value !== item.value) {
+          each.selected = false
+        }
       }
-    }
+
+      return statuses
+    })
+
   }
 
   onFormSubmit(form: FormGroup) {
