@@ -1,5 +1,5 @@
 import { Component, Input, inject, output } from '@angular/core';
-import { Status } from '../../../shared/utils/unions';
+import { Status, TaskItem } from '../../../shared/utils/unions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgClass } from '@angular/common';
 
@@ -11,8 +11,8 @@ import { NgClass } from '@angular/common';
   styleUrl: './task-item.component.scss'
 })
 export class TaskItemComponent {
-  @Input() task: any;
-  @Input() id!: any;
+  @Input() task!: TaskItem;
+  @Input() id!: number;
 
   openSidebarEmmitter = output<void>()
 

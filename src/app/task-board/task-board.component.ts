@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { TaskItemComponent } from './components/task-item/task-item.component';
 import { AuthService } from '../core/services/auth.service';
 import { TaskBoardService } from './task-board.service';
-import { ResponseStatus } from '../shared/utils/unions';
+import { ResponseStatus, TaskItem } from '../shared/utils/unions';
 import { TaskSideBarComponent } from './components/task-side-bar/task-side-bar.component';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, filter, map } from 'rxjs';
@@ -22,7 +22,7 @@ export class TaskBoardComponent {
   private route = inject(ActivatedRoute)
 
   sidebarOpened: boolean = false
-  tasks$!: Observable<any[]>;
+  tasks$!: Observable<TaskItem[]>;
 
 
   ngOnInit(): void {
